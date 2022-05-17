@@ -22,5 +22,26 @@ contract TodoContract {
         todos[taskCount] = Task(taskCount, _taskName, false);
         taskCount++;
         emit TaskCreated((_taskName), taskCount - 1);
+
+    
+    }
+
+    function updateTask(uint256 _taskId, string memory _taskName) public {
+        Task memory currTask = todos[_taskId];
+        todos[_taskId] = Task(_taskId, _taskName, currTask.isComplete);
+        emit TaskUpdated( _taskName, _taskId);
+
+    }
+
+    function deleteTask(uint256 _taskId) public {
+        delete todos[_taskId];
+        emit TaskDeleted(_taskId);
+    }
+
+    function toggleComplete(uint256 _taskId) public {
+        Task memory currTask = todos[_taskId];
+        todos[_taskId] = Task(_taskId, currTask.taskName, !currTask.isComplete);
+
+        emit TaskIsCompleteToggled(currTask.taskName, _taskId, !currTask.isComplete);
     }
 }
