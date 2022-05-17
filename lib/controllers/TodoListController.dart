@@ -158,6 +158,5 @@ class TodoListController extends GetxController {
       ),
     );
     await getTodos();
-    update();
   }
 }
