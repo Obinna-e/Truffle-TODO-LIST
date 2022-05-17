@@ -9,8 +9,8 @@ import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class TodoListController extends GetxController {
-  List<Task> todos = <Task>[].obs;
-  bool isLoading = true;
+  List<Task> todos = <Task>[];
+  var isLoading = true.obs;
   late int taskCount;
   final String _rpcUrl = "http://127.0.0.1:7545";
   final String _wsUrl = "ws://127.0.0.1:7545/";
@@ -47,6 +47,7 @@ class TodoListController extends GetxController {
     await getAbi();
     await getCredentials();
     await getDeployedContract();
+    update();
   }
 
   Future<void> getAbi() async {
@@ -73,6 +74,7 @@ class TodoListController extends GetxController {
     _toggleComplete = _contract.function("toggleComplete");
     _todos = _contract.function("todos");
     await getTodos();
+    update();
   }
 
   getTodos() async {
@@ -95,13 +97,13 @@ class TodoListController extends GetxController {
           ),
         );
     }
-    isLoading = false;
     todos = todos.reversed.toList();
+    isLoading(false);
     update();
   }
 
   addTask(String taskNameData) async {
-    isLoading = true;
+    isLoading(true);
 
     await _client.sendTransaction(
       _credentials,
@@ -116,7 +118,7 @@ class TodoListController extends GetxController {
   }
 
   updateTask(int id, String taskNameDate) async {
-    isLoading = true;
+    isLoading(true);
     update();
     await _client.sendTransaction(
       _credentials,
@@ -132,7 +134,7 @@ class TodoListController extends GetxController {
   }
 
   deleteTask(int id) async {
-    isLoading = true;
+    isLoading(true);
     update();
     await _client.sendTransaction(
       _credentials,
@@ -147,7 +149,7 @@ class TodoListController extends GetxController {
   }
 
   toggleComplete(int id) async {
-    isLoading = true;
+    isLoading(true);
     update();
     await _client.sendTransaction(
       _credentials,

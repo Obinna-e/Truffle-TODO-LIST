@@ -19,56 +19,58 @@ class TodoList extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: todolistcontroller.isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                const SizedBox(
-                  height: 16,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: todolistcontroller.todos.length,
-                    itemBuilder: (context, index) => ListTile(
-                      title: InkWell(
-                        onTap: () {
-                          showTodoBottomSheet(
-                            context,
-                            task: todolistcontroller.todos[index],
-                          );
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 12,
-                          ),
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                value:
-                                    todolistcontroller.todos[index].isCompleted,
-                                onChanged: (val) {
-                                  todolistcontroller.toggleComplete(
-                                      todolistcontroller.todos[index].id);
-                                },
-                              ),
-                              Text(todolistcontroller.todos[index].taskName),
-                            ],
-                          ),
+      body: Obx(() {
+        if (todolistcontroller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          return Column(
+            children: [
+              const SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: todolistcontroller.todos.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: InkWell(
+                      onTap: () {
+                        showTodoBottomSheet(
+                          context,
+                          task: todolistcontroller.todos[index],
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 12,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              value:
+                                  todolistcontroller.todos[index].isCompleted,
+                              onChanged: (val) {
+                                todolistcontroller.toggleComplete(
+                                    todolistcontroller.todos[index].id);
+                              },
+                            ),
+                            Text(todolistcontroller.todos[index].taskName),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
+          );
+        }
+      }),
     );
   }
 }
